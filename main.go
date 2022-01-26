@@ -118,13 +118,29 @@ func innerMain(ctx context.Context) error {
 				if issue == nil {
 					return fmt.Errorf("issue is nil: %v", p)
 				}
-
 				switch *p.Action {
 				case "created":
-					if commentedIssues[*repo.Name] == nil {
-						commentedIssues[*repo.Name] = make(map[int]*github.Issue)
+					if p.Issue.IsPullRequest() {
+						// Pull requests are issues, if a comment is left on a
+						// PR that wasn't opened by the user, consider that
+						// part of PR review.
+						if *p.Issue.User.Login != githubUsername {
+							if reviewedPullRequests[*repo.Name] == nil {
+								reviewedPullRequests[*repo.Name] = make(map[int]*github.PullRequest)
+							}
+							s := strings.Split(*repo.Name, "/")
+							pull, _, err := ghClient.PullRequests.Get(ctx, s[0], s[1], *issue.Number)
+							if err != nil {
+								return err
+							}
+							reviewedPullRequests[*repo.Name][*issue.Number] = pull
+						}
+					} else {
+						if commentedIssues[*repo.Name] == nil {
+							commentedIssues[*repo.Name] = make(map[int]*github.Issue)
+						}
+						commentedIssues[*repo.Name][*issue.Number] = issue
 					}
-					commentedIssues[*repo.Name][*issue.Number] = issue
 				}
 			case *github.IssuesEvent:
 				issue := p.Issue
