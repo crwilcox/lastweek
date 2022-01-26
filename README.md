@@ -13,6 +13,9 @@ export GITHUB_TOKEN=your-token
 lastweek
 ```
 
+> Note: This assume ~/go/bin (or wherever go binaries are installed on your
+> system) is on your path. lastweek is likely installed at ~/go/bin/lastweek
+
 ## Usage
 
 Token and User can be provided via environment variables. Note, User can be
