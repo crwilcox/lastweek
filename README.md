@@ -6,6 +6,10 @@ your coworkers, or just for your own notes.
 
 ## Installing / Quick Start
 
+### From released binary
+Navigate to [tags](https://github.com/crwilcox/lastweek/tags) and find a recent release. Binaries are published for various linux and mac distributions.
+
+### From go install
 ```
 go install github.com/crwilcox/lastweek@latest
 
