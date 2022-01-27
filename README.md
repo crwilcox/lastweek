@@ -9,6 +9,11 @@ your coworkers, or just for your own notes.
 ### From released binary
 Navigate to [tags](https://github.com/crwilcox/lastweek/tags) and find a recent release. Binaries are published for various linux and mac distributions.
 
+```
+export GITHUB_TOKEN=your-token
+lastweek
+```
+
 ### From go install
 ```
 go install github.com/crwilcox/lastweek@latest
@@ -17,8 +22,14 @@ export GITHUB_TOKEN=your-token
 lastweek
 ```
 
-> Note: This assume ~/go/bin (or wherever go binaries are installed on your
+> Note: This assumes ~/go/bin (or wherever go binaries are installed on your
 > system) is on your path. lastweek is likely installed at ~/go/bin/lastweek
+
+## Token Scopes
+
+While a GitHub token isn't required, it will restrict the reporting to public
+activity. It also could result in issues due to GitHub rate limiting. The token
+created requires the `repo` scope to access private repositories.
 
 ## Usage
 
