@@ -59,7 +59,7 @@ func innerMain(ctx context.Context) error {
 	client := http.DefaultClient
 
 	// Parse envvars and flags
-	githubToken, err := getGithubToken()
+	githubToken, err := githubToken()
 	if err != nil {
 		fmt.Println(
 			"$GITHUB_TOKEN or -token flag not set - GitHub may block your " +
@@ -76,11 +76,11 @@ func innerMain(ctx context.Context) error {
 	}
 	ghClient := github.NewClient(client)
 
-	githubUsername, err := getUsername(ctx, ghClient)
+	githubUsername, err := username(ctx, ghClient)
 	if err != nil {
 		return err
 	}
-	startTime, endTime, err := getTimerange()
+	startTime, endTime, err := timerange()
 	if err != nil {
 		return err
 	}

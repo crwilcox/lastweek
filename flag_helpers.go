@@ -24,9 +24,9 @@ import (
 	"github.com/google/go-github/v42/github"
 )
 
-// getGithubToken returns the github token to use. Priority is given to the
+// githubToken returns the github token to use. Priority is given to the
 // cmd line flag, then env var.
-func getGithubToken() (string, error) {
+func githubToken() (string, error) {
 	if *githubTokenFlag != "" {
 		fmt.Println("Using GitHub personal access token provided via flag.")
 		return *githubTokenFlag, nil
@@ -42,10 +42,10 @@ func getGithubToken() (string, error) {
 	return "", fmt.Errorf("github access token not provided via -token flag or $GITHUB_TOKEN")
 }
 
-// getUsername returns the github username to use. Priority is given to the
+// username returns the github username to use. Priority is given to the
 // cmd line flag, then env var, lastly, autodiscovery of the username is
 // attempted from the provided GitHub access token.
-func getUsername(ctx context.Context, ghClient *github.Client) (string, error) {
+func username(ctx context.Context, ghClient *github.Client) (string, error) {
 	if *userFlag != "" {
 		fmt.Printf("User identified as %s via flag\n", *userFlag)
 		return *userFlag, nil
@@ -71,9 +71,9 @@ func getUsername(ctx context.Context, ghClient *github.Client) (string, error) {
 	return *user.Login, nil
 }
 
-// getTimerange determines the start and end times from the different timerange
+// timerange determines the start and end times from the different timerange
 // flags: start_date, end_date, start_of_week, weeks_back
-func getTimerange() (startTime, endTime time.Time, err error) {
+func timerange() (startTime, endTime time.Time, err error) {
 	// Determine start and end times
 	if *startDateFlag != "" && *endDateFlag != "" {
 		if startTime, err = time.Parse("2006-01-02", *startDateFlag); err != nil {
