@@ -4,6 +4,8 @@ Given a username and/or GitHub access token, this tool will provide a report
 of the work done by the user last week. This can be useful for sharing with
 your coworkers, or just for your own notes.
 
+![](demo.gif)
+
 ## Installing / Quick Start
 
 ### From released binary
