@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+// Last week provides a report of the work done by the user last week.
+// This can be useful for sharing with your coworkers, or just for your own
+// notes.
 package main
 
 import (

@@ -1,4 +1,4 @@
-module github.com/crwilcox/lastweek
+module go.crwilcox.dev/lastweek
 
 go 1.17
 

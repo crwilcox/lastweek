@@ -18,7 +18,7 @@ lastweek
 
 ### From go install
 ```
-go install github.com/crwilcox/lastweek@latest
+go install go.crwilcox.dev/lastweek@latest
 
 export GITHUB_TOKEN=your-token
 lastweek
