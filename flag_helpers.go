@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v42/github"
+	"github.com/google/go-github/v60/github"
 )
 
 // githubToken returns the github token to use. Priority is given to the
