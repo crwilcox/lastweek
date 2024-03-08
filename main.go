@@ -96,6 +96,7 @@ func innerMain(ctx context.Context) error {
 	commentedIssues := make(map[string]map[int]*github.Issue)
 	openedPullRequests := make(map[string]map[int]*github.PullRequest)
 	reviewedPullRequests := make(map[string]map[int]*github.PullRequest)
+	closedPullRequests := make(map[string]map[int]*github.PullRequest)
 
 	options := &github.ListOptions{Page: 0}
 	for {
@@ -175,6 +176,11 @@ func innerMain(ctx context.Context) error {
 						openedPullRequests[*repo.Name] = make(map[int]*github.PullRequest)
 					}
 					openedPullRequests[*repo.Name][*pullRequest.Number] = p.PullRequest
+				case "closed": // Heh.
+					if closedPullRequests[*repo.Name] == nil {
+						closedPullRequests[*repo.Name] = make(map[int]*github.PullRequest)
+					}
+					closedPullRequests[*repo.Name][*pullRequest.Number] = p.PullRequest
 				}
 			case *github.PullRequestReviewCommentEvent:
 				pullRequest := p.PullRequest
@@ -268,11 +274,30 @@ func innerMain(ctx context.Context) error {
 			repos = append(repos, k)
 		}
 
-		fmt.Fprintf(&w, "### Pull requests\n\n")
+		fmt.Fprintf(&w, "### Pull requests opened\n\n")
 		for _, r := range repos {
 			formatRepo(&w, r)
 
 			pullRequests := sortPullRequests(openedPullRequests[r])
+			for _, i := range pullRequests {
+				formatPullRequest(&w, i)
+			}
+			fmt.Fprintln(&w)
+		}
+		fmt.Fprintln(&w)
+	}
+
+	if len(closedPullRequests) > 0 {
+		repos := make([]string, 0, len(closedPullRequests))
+		for k := range closedPullRequests {
+			repos = append(repos, k)
+		}
+
+		fmt.Fprintf(&w, "### Pull requests closed\n\n")
+		for _, r := range repos {
+			formatRepo(&w, r)
+
+			pullRequests := sortPullRequests(closedPullRequests[r])
 			for _, i := range pullRequests {
 				formatPullRequest(&w, i)
 			}
@@ -313,8 +338,21 @@ func formatIssue(w io.Writer, i *github.Issue) {
 	fmt.Fprintf(w, "    -   [%s](%s)\n", *i.Title, *i.HTMLURL)
 }
 
+func formatMerged(w io.Writer, i *github.PullRequest) {
+	if i.Merged != nil {
+		if *i.Merged {
+			fmt.Fprintf(w, " [merged]\n")
+		} else {
+			fmt.Fprintf(w, " [not merged]\n")
+		}
+	} else {
+		fmt.Fprintf(w, "\n")
+	}
+}
+
 func formatPullRequest(w io.Writer, i *github.PullRequest) {
-	fmt.Fprintf(w, "    -   [%s](%s)\n", *i.Title, *i.HTMLURL)
+	fmt.Fprintf(w, "    -   [%s](%s)", *i.Title, *i.HTMLURL)
+	formatMerged(w, i)
 }
 
 func sortIssues(m map[int]*github.Issue) []*github.Issue {
